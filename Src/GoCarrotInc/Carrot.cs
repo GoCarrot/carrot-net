@@ -13,10 +13,6 @@
  * limitations under the License.
  */
 
-#if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_DASHBOARD_WIDGET || UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_WEBPLAYER || UNITY_WII || UNITY_IPHONE || UNITY_ANDROID || UNITY_PS3 || UNITY_XBOX360 || UNITY_NACL || UNITY_FLASH
-#  define UNITY
-#endif
-
 using System;
 using System.IO;
 using System.Net;
@@ -86,7 +82,6 @@ namespace GoCarrotInc
         public delegate void AsynchValidateComplete(object sender, AuthStatus response);
         public delegate void AsynchCallComplete(object sender, Response response);
 
-#if !UNITY
         public Carrot(string appId, SecureString appSecret, string userId = null, string hostname = "gocarrot.com")
         {
             mAppId = appId;
@@ -95,19 +90,14 @@ namespace GoCarrotInc
             mHostname = hostname;
             mAuthStatus = AuthStatus.Undetermined;
         }
-#endif
 
         public Carrot(string appId, string appSecret, string userId, string hostname = "gocarrot.com")
         {
-#if UNITY
-            mAppSecret = appSecret;
-#else
             mAppSecret = new SecureString();
             foreach(char c in appSecret)
             {
                 mAppSecret.AppendChar(c);
             }
-#endif
             mAppId = appId;
             mUserId = userId;
             mHostname = hostname;
@@ -754,11 +744,7 @@ namespace GoCarrotInc
         private string mUserId;
         private string mAppId;
         private string mHostname;
-#if UNITY
-        private string mAppSecret;
-#else
         private SecureString mAppSecret;
-#endif
         private AuthStatus mAuthStatus;
     }
 }
